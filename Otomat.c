@@ -19,16 +19,58 @@ struct CustomerAccount AddAccount(){
 }
 
 
+	
 
 int SendMoney(struct CustomerAccount RecipientAccount,struct CustomerAccount SenderAccount,int Amount){
-	SenderAccount.Ballance=SenderAccount.Ballance+Amount;
+	SenderAccount.Ballance=SenderAccount.Ballance-Amount;
 	RecipientAccount.Ballance=RecipientAccount.Ballance+Amount;
+	Set(SenderAccount.AccountNumber,Amount,"SendMoney","SenderAccount");
+	Set(RecipientAccount.AccountNumber,Amount,"SendMoney","RecipientAccount");
 	return 0;
+}
+
+void AddSet(int id,int amount){
+	int i;
+	for( i=0;i<2;++i){
+		if(sttcAccount[i].AccountNumber==id)
+		{
+			
+			sttcAccount[i].Ballance=sttcAccount[i].Ballance+amount;
+			break;
+		}
+	}
+}
+
+void GetSet(int id, int amount){
+	int i;
+	for( i=0;i<2;++i){
+		if(sttcAccount[i].AccountNumber==id)
+		{
+			
+			sttcAccount[i].Ballance=sttcAccount[i].Ballance-amount;
+			break;
+		}
+	}
+}
+
+void Set(int id,int amount,char process[50],char AccountType[50]){
+	if(process=="Deposit"){
+		AddSet(id,amount);
+	}
+	else{
+		if(AccountType=="RecipientAccount"){
+			AddSet(id,amount);
+		}
+		else{
+			GetSet(id,amount);
+		}
+	}
+		
 }
 
 int Deposit(struct CustomerAccount Account,int Amount){
 	Account.Ballance=Account.Ballance+Amount;
-	return 0;
+	return Account.Ballance;
 }
 
 void LookBalance(struct CustomerAccount Account){
@@ -37,12 +79,15 @@ void LookBalance(struct CustomerAccount Account){
 }
 
 int main() {
-  // Create a structure variable and assign values to it
   AddAccount();
+  
+  SendMoney(sttcAccount[1],sttcAccount[0],100);
+  
+  
   
   LookBalance(sttcAccount[0]);
   printf("\n");
-  printf("%s",sttcAccount[1].CustomerFullName);
+  printf("%s %d",sttcAccount[1].CustomerFullName);
   
   return 0;
 }
