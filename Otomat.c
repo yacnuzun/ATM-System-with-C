@@ -81,13 +81,13 @@ void LookBalance(struct CustomerAccount Account){
 int main() {
   AddAccount();
   
-  SendMoney(sttcAccount[1],sttcAccount[0],100);
+  SendMoney(sttcAccount[0],sttcAccount[1],100);
   
   
   
   LookBalance(sttcAccount[0]);
   printf("\n");
-  printf("%s %d",sttcAccount[1].CustomerFullName);
+  printf("%s",sttcAccount[1].CustomerFullName);
   
   return 0;
 }
