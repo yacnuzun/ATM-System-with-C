@@ -7,6 +7,8 @@ struct CustomerAccount {
    char CustomerFullName[50];
    int Ballance;
 };
+
+
 static struct CustomerAccount sttcAccount[2];
 struct CustomerAccount AddAccount(){
 	
@@ -53,6 +55,17 @@ void GetSet(int id, int amount){
 	}
 }
 
+struct CustomerAccount FindAccount(int id){
+	int i;
+	for( i=0;i<2;++i){
+		if(sttcAccount[i].AccountNumber==id)
+		{
+			
+			return sttcAccount[i];
+		}
+	}
+}
+
 void Set(int id,int amount,char process[50],char AccountType[50]){
 	if(process=="Deposit"){
 		AddSet(id,amount);
@@ -70,24 +83,66 @@ void Set(int id,int amount,char process[50],char AccountType[50]){
 
 int Deposit(struct CustomerAccount Account,int Amount){
 	Account.Ballance=Account.Ballance+Amount;
+	Set(Account.AccountNumber,Amount,"Deposit","Account");
 	return Account.Ballance;
 }
 
-void LookBalance(struct CustomerAccount Account){
+int Ask(){
+	int process;
+	printf("Bir iþlem seçiniz:\n");
+	printf("1) Bakiye öðren\n");
+	printf("2) Para yatýr\n");
+	printf("3) Baþka hesaba para transferi\n");
+	scanf("%d", &process);
+	return process;
+}
+
+int AnswerforSendMoney(){
+	int sender,recipient,amount;
+	printf("Gönderen Hesap:");
+	scanf("%d", &sender);
+	printf("\n");
+	printf("Alýcý Hesap:");
+	scanf("%d", &recipient);
+	printf("\n");
+	printf("Miktar:");
+	scanf("%d", &amount);
+	struct CustomerAccount senderAccount=FindAccount(sender);
+	struct CustomerAccount recipientAccount=FindAccount(recipient);
+	SendMoney(recipientAccount,senderAccount,amount);
+	LookBalance(senderAccount);
+	LookBalance(recipientAccount);
 	
-	printf("%d %s %d",Account.AccountNumber,Account.CustomerFullName,Account.Ballance);
+	return 0;
+}
+
+void Answer(int process){
+				switch (process)
+				{
+    				case 1:
+      				
+      				break;
+
+    				case 2:
+     				
+      				break;
+    				
+    				case 3:
+     					AnswerforSendMoney();
+      				break;
+    
+				}
+}
+
+void LookBalance(struct CustomerAccount Account){
+	struct CustomerAccount fAccount=FindAccount(Account.AccountNumber);
+	printf("%d %s %d",fAccount.AccountNumber,fAccount.CustomerFullName,fAccount.Ballance);
 }
 
 int main() {
   AddAccount();
   
-  SendMoney(sttcAccount[0],sttcAccount[1],100);
-  
-  
-  
-  LookBalance(sttcAccount[0]);
-  printf("\n");
-  printf("%s",sttcAccount[1].CustomerFullName);
-  
+  int answr=Ask();
+  Answer(answr);
   return 0;
 }
