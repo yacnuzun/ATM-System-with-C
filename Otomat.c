@@ -1,6 +1,6 @@
 
 #include <stdio.h>
-
+#include<locale.h>
 
 struct CustomerAccount {
    int AccountNumber;
@@ -64,7 +64,7 @@ struct CustomerAccount FindAccount(int id){
 			return sttcAccount[i];
 		}
 	}
-}
+};
 
 void Set(int id,int amount,char process[50],char AccountType[50]){
 	if(process=="Deposit"){
@@ -116,15 +116,50 @@ int AnswerforSendMoney(){
 	return 0;
 }
 
+int AnswerforDeposit(){
+	int account,amount;
+	printf("Hesap:");
+	scanf("%d", &account);
+	printf("\n");
+	printf("Miktar:");
+	scanf("%d", &amount);
+	struct CustomerAccount depoAccount=FindAccount(account);
+	Deposit(depoAccount,amount);
+	LookBalance(depoAccount);
+	
+	return 0;
+}
+
+
+int AnswerforLookBalance(){
+	int choise;
+	printf("1) Hesaba göre");
+	printf("\n");
+	printf("2) Tüm Hesaplara");
+	scanf("%d", &choise);
+	printf("\n");
+	(choise==1)?(GetById()):(GetAllAccount());
+	
+	return 0;
+}
+
+void GetById(){
+		int account;
+		printf("Hesap:");
+		scanf("%d", &account);
+		struct CustomerAccount cAccount=FindAccount(account);
+		LookBalance(cAccount);
+}
+
 void Answer(int process){
 				switch (process)
 				{
     				case 1:
-      				
+      					AnswerforLookBalance();
       				break;
 
     				case 2:
-     				
+     					AnswerforDeposit();
       				break;
     				
     				case 3:
@@ -136,10 +171,18 @@ void Answer(int process){
 
 void LookBalance(struct CustomerAccount Account){
 	struct CustomerAccount fAccount=FindAccount(Account.AccountNumber);
-	printf("%d %s %d",fAccount.AccountNumber,fAccount.CustomerFullName,fAccount.Ballance);
+	printf("%d %s %d \n",fAccount.AccountNumber,fAccount.CustomerFullName,fAccount.Ballance);
+}
+
+void GetAllAccount(){
+	int i=0;
+	for(i=0;i<2;++i){
+		printf("%d %s %d\n",sttcAccount[i].AccountNumber,sttcAccount[i].CustomerFullName,sttcAccount[i].Ballance);
+	}
 }
 
 int main() {
+  setlocale(LC_ALL, "Turkish");
   AddAccount();
   
   int answr=Ask();
